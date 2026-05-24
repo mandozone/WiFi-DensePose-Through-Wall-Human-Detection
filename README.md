@@ -1,8 +1,8 @@
-# WiFi DensePose Through-Wall Human Detection Lab
+# WiFi CSI Telemetry Research Lab
 
 **Live project site:** https://mandozone.github.io/WiFi-DensePose-Through-Wall-Human-Detection/
 
-WiFi DensePose is a research-style lab exploring passive human presence and movement sensing using WiFi Channel State Information (CSI). The project uses a Dockerized RuView / WiFi DensePose environment on Kali Linux to run a local dashboard, simulate sensing data, and prepare for future ESP32-based CSI capture.
+WiFi CSI Telemetry Research Lab is a research-style lab exploring passive human presence and movement sensing using WiFi Channel State Information (CSI). The project uses a Dockerized RuView environment on Kali Linux to run a local dashboard, simulate sensing data, and prepare for future ESP32-based CSI capture.
 
 > Current status: **Phase 1 operational in simulation mode.** The Docker backend and dashboard are running locally. Hardware CSI capture, through-wall validation, and vital-sign validation are planned next steps.
 
@@ -11,7 +11,7 @@ WiFi DensePose is a research-style lab exploring passive human presence and move
 | Area | Details |
 |---|---|
 | **Project type** | Wireless sensing, infrastructure lab, Docker deployment, RF/security research |
-| **What I built** | Kali Linux VM setup, Dockerized WiFi DensePose/RuView server, local dashboard, simulation-mode sensing workflow, hardware roadmap |
+| **What I built** | Kali Linux VM setup, Dockerized RuView CSI telemetry server, local dashboard, simulation-mode sensing workflow, hardware roadmap |
 | **Evidence** | Docker logs, dashboard screenshots, network verification, sensing visualization, ESP32-S3 hardware procurement |
 | **Security relevance** | Demonstrates infrastructure troubleshooting, wireless/RF awareness, privacy-sensitive technology evaluation, and staged lab documentation |
 
@@ -91,7 +91,7 @@ ss -tlnp | grep -E "3000|3001"
 The `site/assets/` folder contains upright optimized screenshots showing:
 
 - ESP32-S3 receiver hardware procurement
-- Local WiFi DensePose dashboard
+- Local WiFi CSI Telemetry Research Lab dashboard
 - Docker container logs and server status
 - docker-compose environment setup
 - Network verification and packet tests

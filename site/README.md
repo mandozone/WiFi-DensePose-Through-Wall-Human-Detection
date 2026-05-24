@@ -1,6 +1,6 @@
 # Site
 
-Static GitHub Pages site for the WiFi DensePose Through-Wall Human Detection Lab.
+Static GitHub Pages site for the WiFi CSI Telemetry Research Lab.
 
 Open locally:
 

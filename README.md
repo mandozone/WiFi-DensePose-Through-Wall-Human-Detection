@@ -1,118 +1,78 @@
 # WiFi CSI Telemetry Research Lab
 
-**Live project site:** https://mandozone.github.io/WiFi-DensePose-Through-Wall-Human-Detection/
+**A Docker and wireless-sensing lab by Romando Wright.**
 
-WiFi CSI Telemetry Research Lab is a research-style lab exploring passive human presence and movement sensing using WiFi Channel State Information (CSI). The project uses a Dockerized RuView environment on Kali Linux to run a local dashboard, simulate sensing data, and prepare for future ESP32-based CSI capture.
+This repository documents my early RuView deployment on Kali Linux: container setup, local dashboard access, simulation output, and troubleshooting. It preserves the starting point for the broader AHSIN sensor and agent project.
 
-> Current status: **Phase 1 operational in simulation mode.** The Docker backend and dashboard are running locally. Hardware CSI capture, through-wall validation, and vital-sign validation are planned next steps.
+[View the lab site](https://mandozone.github.io/WiFi-DensePose-Through-Wall-Human-Detection/) · [Lab notes](docs/LAB_NOTES.md) · [Evidence guide](docs/EVIDENCE.md)
 
-## Recruiter Summary
+## Scope and status
 
-| Area | Details |
-|---|---|
-| **Project type** | Wireless sensing, infrastructure lab, Docker deployment, RF/security research |
-| **What I built** | Kali Linux VM setup, Dockerized RuView CSI telemetry server, local dashboard, simulation-mode sensing workflow, hardware roadmap |
-| **Evidence** | Docker logs, dashboard screenshots, network verification, sensing visualization, ESP32-S3 hardware procurement |
-| **Security relevance** | Demonstrates infrastructure troubleshooting, wireless/RF awareness, privacy-sensitive technology evaluation, and staged lab documentation |
+| Area | Recorded result |
+| --- | --- |
+| Environment | Kali Linux virtual machine with Docker |
+| Deployment | Upstream RuView image pulled and a container started |
+| Interface | Local dashboard and sensing visualizations displayed |
+| Data source | Simulation is part of the captured early lab stage |
+| Hardware and sensing | ESP32 integration continued as a separate development track |
+| Through-wall accuracy and vital signs | Not validated by this repository's screenshots |
 
-## Architecture
+These are historical lab records, not a live service-health report. The repository name describes the research direction; it does not establish a working through-wall detection system.
 
-```text
-Alfa AWUS036AC transmitter
-        |
-        | WiFi sensing traffic
-        v
-Human body affects signal path through absorption, reflection, diffraction, and scattering
-        |
-        v
-ESP32-S2 / ESP32-S3 receivers capture CSI
-        |
-        | WebSocket 3001 / UDP 5005
-        v
-Kali Linux VM + Docker
-        |
-        v
-Rust/Axum RuView backend + local dashboard on port 3000
-```
+## My contribution
 
-## CSI vs RSSI
+- Configured and troubleshot the Kali/Docker environment.
+- Investigated image startup, command formatting, DNS, and dashboard route issues.
+- Documented the difference between infrastructure working and sensor data being validated.
+- Recorded the early UI and deployment workflow, then continued broader integration work under AHSIN.
 
-RSSI is a single coarse signal-strength value. CSI is lower-level channel data that can include amplitude and phase changes across subcarriers. That makes CSI more useful for motion and presence research because it exposes small signal variations caused by movement, multipath interference, and body-position changes.
+The sensing application is upstream software. This project does not claim authorship of RuView or an independently trained DensePose model.
 
-## Hardware Status
+## Selected photographs
 
-| Component | Purpose | Status |
-|---|---|---|
-| Alfa AWUS036AC | WiFi transmitter / packet injection adapter | Owned |
-| ESP32-S2 DevKit | CSI receiver testing | Owned |
-| 2x ESP32-S3 DevKitC-1 | Multi-receiver triangulation | Ordered |
-| Kali Linux VM | Processing environment | Running |
+### Container setup
 
-## Software Stack
+![Docker image pull and container launch](site/assets/container-setup.jpg)
 
-- Kali Linux 2025.2
-- VirtualBox
-- Docker and docker-compose
-- `ruvnet/wifi-densepose:latest`
-- Rust/Axum backend
-- WebSocket `3001`
-- UDP `5005`
-- Local UI: `http://localhost:3000/ui/index.html`
+The terminal shows the upstream image pull and a container identifier returned after launch. It does not show successful hardware ingestion. The photograph is a historical record, not a current deployment recipe; review binding and access controls before exposing any service.
 
-## Commands
+### Local interface
 
-```bash
-docker pull ruvnet/wifi-densepose:latest
+![Historical RuView interface displayed in a local browser](site/assets/dashboard-live.jpg)
 
-docker run -d --name ruview \
-  -p 3000:3000 \
-  -p 3001:3001 \
-  -p 5005:5005/udp \
-  -e CSI_SOURCE=auto \
-  ruvnet/wifi-densepose:latest
+This verifies that the interface was displayed. Promotional text inside the upstream UI is not a measured result from this lab.
 
-docker logs ruview -f
-curl -s http://localhost:3000/health
-curl -s -o /dev/null -w "%{http_code}" http://localhost:3000/ui/index.html
-ss -tlnp | grep -E "3000|3001"
-```
+### Simulation views
 
-## Troubleshooting Log
+![Simulation-stage sensing heatmap](site/assets/sensing-heatmap.jpg)
 
-| Issue | Cause | Fix |
-|---|---|---|
-| DNS resolution failure | VirtualBox NAT DNS issue | Set resolver to `8.8.8.8` |
-| `docker-compose` missing | Not installed by default on Kali | Installed with `sudo apt install -y docker-compose` |
-| Frontend 404 | Stale Docker image missing UI files | Pulled fresh `ruvnet/wifi-densepose:latest` |
-| Multi-line Docker command failed | Shell line-continuation parsing | Used single-line command / full block paste |
+![Simulation-stage classification display](site/assets/present-moving.jpg)
 
-## Evidence Screenshots
+The heatmap, classification, and confidence display illustrate the interface during the early simulation stage. They do not independently demonstrate a real person's location, breathing, or movement.
 
-The `site/assets/` folder contains upright optimized screenshots showing:
+## Lab workflow
 
-- ESP32-S3 receiver hardware procurement
-- Local WiFi CSI Telemetry Research Lab dashboard
-- Docker container logs and server status
-- docker-compose environment setup
-- Network verification and packet tests
-- Simulation heatmap / sensing visualization
-- `PRESENT_MOVING` classification screen
+| Step | What to establish |
+| --- | --- |
+| Environment | Correct VM networking, DNS, and Docker installation |
+| Container | Expected image revision, running process, and intended port mapping |
+| Web interface | Correct route and successful page load |
+| Data source | Explicit simulation, recorded-input, or hardware mode |
+| Hardware validation | Receiver-side data, payload decoding, identity, and freshness |
+| Sensing validation | Controlled conditions, ground truth, and measured errors |
 
-## Roadmap
+Read the [lab notes](docs/LAB_NOTES.md) before treating a screenshot as a result. A page loading and a container running are separate checks from a validated sensor pipeline.
 
-| Phase | Status | Work |
-|---|---|---|
-| Infrastructure setup | Complete | Kali VM, Docker, RuView image, dashboard |
-| Hardware procurement | In progress | ESP32-S3 boards ordered |
-| Firmware and CSI capture | Pending | Flash ESP32 firmware and stream CSI to server |
-| Calibration | Pending | Sensor placement, room mapping, model tuning |
-| Through-wall validation | Pending | Authorized lab testing only |
+## Relationship to AHSIN
 
-## Ethics and Privacy
+[AHSIN](https://github.com/mandozone/ahsin) expands the work into sensor telemetry, operator dashboards, and permission-controlled AI tools. This repository stays focused on the early Wi-Fi/RuView lab; the broader manuals and agent-framework evidence belong in the separate AHSIN documentation repository.
 
-This is privacy-sensitive technology. This project is documented as an authorized lab and research build. It should only be tested in controlled environments where all participants understand the sensing setup and consent to testing.
+## Privacy and attribution
 
-## Skills Demonstrated
+Selected photographs were reviewed for visible private information and stripped of original metadata. Raw screenshot originals and address-bearing terminal images have been removed from the current tree. This does not remove files from earlier Git commits.
 
-`Kali Linux` · `Docker` · `Wireless Security` · `WiFi CSI` · `RF Sensing` · `ESP32` · `VirtualBox` · `Troubleshooting` · `Technical Documentation` · `Privacy-Aware Security Research`
+Experiments require authorization and participant consent. No medical or safety-critical claims are made.
 
+Upstream image used in the recorded experiment: `ruvnet/wifi-densepose`. Third-party software and interface content remain subject to their respective licenses.
+
+Documentation refreshed October 10, 2026.
